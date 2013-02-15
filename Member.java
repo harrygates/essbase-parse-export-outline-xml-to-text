@@ -2,7 +2,7 @@ package outlineReader;
 import java.util.ArrayList;
 
 
-public class Member {
+class Member {
 	private String parent;
 	private String name;
 	private String alias;
@@ -32,7 +32,7 @@ public class Member {
 		this.varianceReporting = varianceReporting;
 	}
 
-	public String getConsolidation() {
+	String getConsolidation() {
 		return (consolidation == null || consolidation.equals("")) ? "+" : consolidation;
 	}
 
@@ -53,7 +53,7 @@ public class Member {
 		this.twoPassCalc = twoPassCalc;
 	}
 
-	public String getMemberFormula() {
+	String getMemberFormula() {
 		return (memberFormula == null || memberFormula.equals("")) ? "" : " " + memberFormula;
 	}
 
@@ -94,7 +94,7 @@ public class Member {
 		this.dataStorage = dataStorage;
 	}
 
-	public String getDataStorage() {
+	String getDataStorage() {
 		return (dataStorage == null || dataStorage.equals("")) ? "" : " " + dataStorage;
 	}
 
@@ -128,7 +128,7 @@ public class Member {
         UDA.add(uda);
     }
 	
-	public String getUDA() {
+	String getUDA() {
 		if (this.UDA == null) return "";
 
 		StringBuilder out = new StringBuilder();
@@ -152,7 +152,7 @@ public class Member {
 		this.parent = parent;
 	}
 
-	public String getAttributes() {
+	String getAttributes() {
 		if (this.attributes == null) return "";
 		
 		StringBuilder out = new StringBuilder();
