@@ -30,7 +30,7 @@ Usage
  * 2) Change the delimiter, inputFile, and outputFile
  * 3) Compile and run MaxLExportOutlineParseXML.java
  */
-public class FastMaxLExportOutlineParseXML {
+public class MaxLExportOutlineParseXML {
 	static String currentElement = "";
 	static String sDimension = "";
 	static String delimiter;
