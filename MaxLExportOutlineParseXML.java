@@ -31,17 +31,17 @@ Usage
  * 3) Compile and run MaxLExportOutlineParseXML.java
  */
 public class MaxLExportOutlineParseXML {
-	static String currentElement = "";
-	static String sDimension = "";
-	static String delimiter;
-	static Member mbr = null;
-	static QName qMbrName = new QName("name");
-	static QName qMbrNameRef = new QName("nameRef");
-	static Stack<String> parents = new Stack<String>();
-	static String inputXMLFile;
-	static String outputFile;
-	static String header = "";
-	static int udaCountTotal = 0;
+	private static String currentElement = "";
+    private static String sDimension = "";
+    private static String delimiter;
+    private static Member mbr = null;
+    private static final QName qMbrName = new QName("name");
+    private static final QName qMbrNameRef = new QName("nameRef");
+    private static final Stack<String> parents = new Stack<String>();
+    private static String inputXMLFile;
+    private static String outputFile;
+    private static String header = "";
+    private static int udaCountTotal = 0;
 	
 	public static void main(String[] args) {
 		inputXMLFile = "/Users/harry/parseMaxLXML/AlrgBs1_Customer.xml";
@@ -181,8 +181,8 @@ public class MaxLExportOutlineParseXML {
 	   * converts time (in milliseconds) to human-readable format
 	   *  "<dd:>hh:mm:ss"
 	   */
-	  public static String millisToShortDHMS(long duration) {
-	    String res = "";
+	  private static String millisToShortDHMS(long duration) {
+	    String res;
 	    long days  = TimeUnit.MILLISECONDS.toDays(duration);
 	    long hours = TimeUnit.MILLISECONDS.toHours(duration)
 	                   - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(duration));
