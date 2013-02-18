@@ -217,7 +217,6 @@ public class MaxLExportOutlineParseXML {
         in.close();
 
         inFile.delete();
-        //outFile.renameTo(inFile);
     }
 
     public String getElapsedTime() {
