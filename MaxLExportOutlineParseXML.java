@@ -1,6 +1,9 @@
 package outlineReader;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -31,33 +34,43 @@ Usage
  * 3) Compile and run MaxLExportOutlineParseXML.java
  */
 public class MaxLExportOutlineParseXML {
-	private static String currentElement = "";
-    private static String sDimension = "";
-    private static String delimiter;
-    private static Member mbr = null;
-    private static final QName qMbrName = new QName("name");
-    private static final QName qMbrNameRef = new QName("nameRef");
-    private static final Stack<String> parents = new Stack<String>();
-    private static String inputXMLFile;
-    private static String outputFile;
-    private static String header = "";
-    private static int udaCountTotal = 0;
-	
+	private String currentElement = "";
+    private String sDimension = "";
+    private String delimiter;
+    private Member mbr = null;
+    private final QName qMbrName = new QName("name");
+    private final QName qMbrNameRef = new QName("nameRef");
+    private final Stack<String> parents = new Stack<String>();
+    private String inputXMLFile;
+    private String outputFile;
+    private String header = "";
+    private int udaCountTotal = 0;
+    private String elapsedTime;
+    private String tempFile;
+    private final String newLineSep = System.getProperty("line.separator");
+
+    public MaxLExportOutlineParseXML(String inputXMLFile, String outputFile, String delimiter) {
+        this.inputXMLFile = inputXMLFile;
+        this.outputFile = outputFile;
+        this.delimiter = delimiter;
+
+        long startTime = System.currentTimeMillis();
+        convertXML();
+        long finishTime = System.currentTimeMillis();
+        this.elapsedTime = millisToShortDHMS(finishTime - startTime);
+        System.out.println("outline parse took: " + this.elapsedTime);
+    }
+
 	public static void main(String[] args) {
-		inputXMLFile = "/Users/harry/parseMaxLXML/AlrgBs1_Customer.xml";
-		outputFile = "/Users/harry/parseMaxLXML/AlrgBs1_Customer1.txt";
-		delimiter = "?";
-		
-		long startTime = System.currentTimeMillis();
-		
-		convertXML();
-		
-		long finishTime = System.currentTimeMillis();
-	    String diff = millisToShortDHMS(finishTime - startTime);
-	    System.out.println("outline parse took: " + diff);
+		String inputXMLFile = "/Users/harry/parseMaxLXML/AlrgBs1_Customer.xml";
+        String outputFile = "/Users/harry/parseMaxLXML/AlrgBs1_Customer1.txt";
+        String delimiter = "?";
+
+        MaxLExportOutlineParseXML parser = new MaxLExportOutlineParseXML(inputXMLFile, outputFile, delimiter);
 	}
 
-	private static void convertXML() {
+	private void convertXML() {
+
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		inputFactory.setProperty("javax.xml.stream.isCoalescing", true);
 		
@@ -65,7 +78,9 @@ public class MaxLExportOutlineParseXML {
 			InputStream in = new FileInputStream(inputXMLFile);
 			XMLEventReader eventReader = inputFactory.createXMLEventReader(in);
 
-			FileWriter output = new FileWriter(outputFile);
+            File outTemp = new File(outputFile);
+            tempFile = outTemp.getParentFile() + File.pathSeparator + "tempText.tmp";
+			FileWriter output = new FileWriter(tempFile);
 			
 			while (eventReader.hasNext()) {
 				XMLEvent event = eventReader.nextEvent();
@@ -84,8 +99,7 @@ public class MaxLExportOutlineParseXML {
 						String mbrName = startElement.getAttributeByName(qMbrName).getValue();
 						
 						if (mbr != null) {
-							output.append(mbr.toString());
-							output.append("\n");
+							output.append(mbr.toString() + newLineSep);
 							udaCountTotal = mbr.countUDA() > udaCountTotal ? mbr.countUDA() : udaCountTotal;
 						}
 						
@@ -126,11 +140,7 @@ public class MaxLExportOutlineParseXML {
 			output.flush();
 			output.close();
 			
-		    String udaHeader = "";
-		    for (int i = 0; i < udaCountTotal; i++) {
-		     udaHeader += "UDA0," + sDimension + delimiter;
-		    }
-		    System.out.println(header += udaHeader);
+		    insertHeader();
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -141,7 +151,7 @@ public class MaxLExportOutlineParseXML {
 		}
 	}
 	
-	private static Member setMemberAttributes(StartElement startElement, Member mbr) {
+	private Member setMemberAttributes(StartElement startElement, Member mbr) {
 		@SuppressWarnings("unchecked")
 		Iterator<Attribute> it1 = startElement.getAttributes();
 		while (it1.hasNext()) {
@@ -166,7 +176,7 @@ public class MaxLExportOutlineParseXML {
 		return mbr;
 	}
 
-	private static Member setAttributeMembers(StartElement startElement, Member mbr) {
+	private Member setAttributeMembers(StartElement startElement, Member mbr) {
 		@SuppressWarnings("unchecked")
 		Iterator<Attribute> it1 = startElement.getAttributes();
 		while (it1.hasNext()) {
@@ -176,12 +186,49 @@ public class MaxLExportOutlineParseXML {
 		}
 		return mbr;
 	}
+
+    private void insertHeader() throws FileNotFoundException, IOException {
+        String udaHeader = "";
+        for (int i = 0; i < udaCountTotal; i++) {
+            udaHeader += "UDA0," + sDimension + delimiter;
+        }
+        header += udaHeader;
+        System.out.println(header);
+
+
+       //temp file
+        File outFile = new File(outputFile);
+        File inFile = new File(tempFile);
+
+        // input
+        FileInputStream fis  = new FileInputStream(inFile);
+        BufferedReader in = new BufferedReader (new InputStreamReader(fis));
+
+        // output
+        FileWriter out = new FileWriter(outFile);
+        out.append(header + newLineSep);
+
+        String thisLine = "";
+        while ((thisLine = in.readLine()) != null) {
+            out.append(thisLine + newLineSep);
+        }
+        out.flush();
+        out.close();
+        in.close();
+
+        inFile.delete();
+        //outFile.renameTo(inFile);
+    }
+
+    public String getElapsedTime() {
+        return elapsedTime;
+    }
 	
 	/**
 	   * converts time (in milliseconds) to human-readable format
 	   *  "<dd:>hh:mm:ss"
 	   */
-	  private static String millisToShortDHMS(long duration) {
+	  private String millisToShortDHMS(long duration) {
 	    String res;
 	    long days  = TimeUnit.MILLISECONDS.toDays(duration);
 	    long hours = TimeUnit.MILLISECONDS.toHours(duration)
