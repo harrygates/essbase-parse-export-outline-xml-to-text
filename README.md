@@ -9,6 +9,14 @@ Either way, you'll need to use MaxL as follows to output the outline in XML:
 Use the MaxL "export outline" command to export a dimension of the outline
  *   export outline "/path_to_otl/Sample.otl" list dimensions {"Account"} with alias_table "Default" to xml_file "/path_to_save_xml/sample_account_dim.xml";
 
+Some people have experienced issues when trying to save the output file on Windows. The following steps are the workaround to this permissions issue:
+* Go to Start -> Programs -> Accessories
+* right click on Command Prompt and select "Run as administrator"
+* cd to the directory where you saved essbase-parse-export-outline-xml-to-text
+* run "java -jar essbase-parse-export-outline-xml-to-text.jar"
+
+You can avoid this issue entirely by not selecting an output location at the root of the C directory (e.g. C:\test). Rather use one such as "C:\Documents and Settings\harry\outputFile.txt".
+
 License
 -------
 (The MIT License)
