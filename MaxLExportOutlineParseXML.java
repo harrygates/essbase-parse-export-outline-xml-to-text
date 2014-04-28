@@ -1,16 +1,5 @@
 package outlineReader;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Iterator;
-import java.util.Stack;
-
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -18,7 +7,9 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
-
+import java.io.*;
+import java.util.Iterator;
+import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
 /***
@@ -26,6 +17,7 @@ import java.util.concurrent.TimeUnit;
  * @author Harry Gates
  * @email harry.gates@gmail.com
  * @blog http://harrygates-essbase-blog.blogspot.com
+ * @copyright Harry Gates 2013-2014
 
 Usage
  * 1) Use the MaxL "export outline" command to export a dimension of the outline
@@ -92,7 +84,7 @@ public class MaxLExportOutlineParseXML {
 						sDimension = startElement.getAttributeByName(qMbrName).getValue();
 						parents.push(sDimension);
 						header = "PARENT0," + sDimension + delimiter + "CHILD0," + sDimension + delimiter + "ALIAS0," + sDimension
-							     + delimiter + "PROPERTY0," + sDimension + delimiter + "FORMULA0," + sDimension + delimiter;
+							     + delimiter + "PROPERTY0," + sDimension + delimiter + "FORMULA0," + sDimension + delimiter + "CURNAME0," + sDimension + delimiter;
 					} else if (currentElement.equals("AttributeDimension")) {
 						header += startElement.getAttributeByName(qMbrNameRef).getValue() + "0," + sDimension + delimiter;
 					} else if (currentElement.equals("Member")) {
@@ -169,6 +161,8 @@ public class MaxLExportOutlineParseXML {
 				mbr.setTimeBalance(attribute.getValue());
 			} else if (nodName.equals("VarianceReporting")) {
 				mbr.setVarianceReporting(attribute.getValue());
+            } else if (nodName.equals("Currency")) {
+                    mbr.setCurrency(attribute.getValue());
 			} else {
 				// System.out.println(nodName + ": " + attribute.getValue());
 			}

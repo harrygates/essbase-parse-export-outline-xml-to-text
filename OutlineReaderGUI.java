@@ -1,10 +1,10 @@
 package outlineReader;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.net.URI;
-import java.awt.Desktop;
 
 public class OutlineReaderGUI extends JDialog {
     private JPanel contentPane;
@@ -20,7 +20,7 @@ public class OutlineReaderGUI extends JDialog {
     public OutlineReaderGUI() {
         setContentPane(contentPane);
         setModal(true);
-        getRootPane().setDefaultButton(butInput);
+        getRootPane().setDefaultButton(butRun);
 
         butInput.addActionListener(new OpenClass());
         butOutput.addActionListener(new SaveClass());
@@ -53,7 +53,7 @@ public class OutlineReaderGUI extends JDialog {
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         butBlog.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String url ="http://harrygates-essbase-blog.blogspot.com";
+                String url = "http://harrygates-essbase-blog.blogspot.com";
                 try {
                     Desktop dt = Desktop.getDesktop();
                     URI uri = new URI(url);
@@ -72,12 +72,11 @@ public class OutlineReaderGUI extends JDialog {
             JFileChooser chooser = new JFileChooser();
 
             int option = chooser.showOpenDialog(OutlineReaderGUI.this);
-            if(option == JFileChooser.APPROVE_OPTION) {
-                inputFile.setText((chooser.getSelectedFile()!=null ? chooser.getSelectedFile().getPath()
-                        : "nothing"));
+            if (option == JFileChooser.APPROVE_OPTION) {
+                inputFile.setText((chooser.getSelectedFile() != null ? chooser.getSelectedFile().getPath() : "nothing"));
             }
 
-            if(option == JFileChooser.CANCEL_OPTION) {
+            if (option == JFileChooser.CANCEL_OPTION) {
                 inputFile.setText("You canceled.");
             }
         }
@@ -88,11 +87,11 @@ public class OutlineReaderGUI extends JDialog {
             JFileChooser chooser = new JFileChooser();
 
             int option = chooser.showSaveDialog(OutlineReaderGUI.this);
-            if(option == JFileChooser.APPROVE_OPTION) {
+            if (option == JFileChooser.APPROVE_OPTION) {
                 outputFile.setText((chooser.getSelectedFile() != null ? chooser.getSelectedFile().getPath() : "nothing"));
             }
 
-            if(option == JFileChooser.CANCEL_OPTION) {
+            if (option == JFileChooser.CANCEL_OPTION) {
                 outputFile.setText("You canceled.");
             }
         }
@@ -105,11 +104,11 @@ public class OutlineReaderGUI extends JDialog {
         String missing = "";
 
         if ("".equals(input)) {
-           missing = "select a MaxL-generated xml file";
+            missing = "select a MaxL-generated xml file";
         } else if ("".equals(output)) {
-           missing = "select input an output text file";
+            missing = "select input an output text file";
         } else if ("".equals(del)) {
-           missing = "input a delimiter";
+            missing = "input a delimiter";
         }
 
         if ("".equals(missing)) {

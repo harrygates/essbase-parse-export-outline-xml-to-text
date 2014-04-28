@@ -14,9 +14,18 @@ class Member {
 	private String twoPassCalc;
 	private String consolidation;
 	private String varianceReporting;
+    private String currency;
 	private String delimiter;
 	
-	
+
+    public String getCurrency() {
+        return currency == null ? "" : currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
 	public void setDelimiter(String delimiter) {
 		this.delimiter = delimiter;
 	}
@@ -175,6 +184,7 @@ class Member {
     			+ delimiter + name
     			+ delimiter + getAlias()
 				+ delimiter + properties.trim()
+                + delimiter + getCurrency()
 				+ delimiter + getMemberFormula()
 				+ delimiter + getAttributes()
 				+ delimiter + getUDA();
