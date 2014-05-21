@@ -16,7 +16,7 @@ Some people have experienced issues when trying to save the output file on Windo
 * cd to the directory where you saved XMLOutlineParser
 * run "java -jar XMLOutlineParser.jar" for GUI mode
 * run java -jar XMLOutlineParser.jar "input file: path & name" "output file: path & name" "field separator to use in output file"
-       e.g. java -jar XMLOutlineParser.jar "/Users/harry/year.xml" "/Users/harry/Documents/year.txt" "!"
+* -------e.g. java -jar XMLOutlineParser.jar "/Users/harry/year.xml" "/Users/harry/Documents/year.txt" "!"
 
 You can avoid this issue entirely by not selecting an output location at the root of the C directory (e.g. C:\test). Rather use one such as "C:\Documents and Settings\harry\outputFile.txt".
 
