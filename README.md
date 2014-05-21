@@ -12,8 +12,10 @@ Use the MaxL "export outline" command to export a dimension of the outline
 Some people have experienced issues when trying to save the output file on Windows. The following steps are the workaround to this permissions issue:
 * Go to Start -> Programs -> Accessories
 * right click on Command Prompt and select "Run as administrator"
-* cd to the directory where you saved essbase-parse-export-outline-xml-to-text
-* run "java -jar essbase-parse-export-outline-xml-to-text.jar"
+* cd to the directory where you saved XMLOutlineParser
+* run "java -jar XMLOutlineParser.jar" for GUI mode
+* run java -jar XMLOutlineParser.jar "input file: path & name" "output file: path & name" "field separator to use in output file"
+*       e.g. java -jar XMLOutlineParser.jar "/Users/harry/year.xml" "/Users/harry/Documents/year.txt" "!"
 
 You can avoid this issue entirely by not selecting an output location at the root of the C directory (e.g. C:\test). Rather use one such as "C:\Documents and Settings\harry\outputFile.txt".
 
