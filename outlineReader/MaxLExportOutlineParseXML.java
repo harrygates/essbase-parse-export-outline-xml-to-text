@@ -1,5 +1,16 @@
 package outlineReader;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Iterator;
+import java.util.Stack;
+
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -7,9 +18,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
-import java.io.*;
-import java.util.Iterator;
-import java.util.Stack;
+
 import java.util.concurrent.TimeUnit;
 
 /***
@@ -54,9 +63,9 @@ public class MaxLExportOutlineParseXML {
     }
 
 	public static void main(String[] args) {
-		String inputXMLFile = "/Users/harry/parseMaxLXML/AlrgBs1_Customer.xml";
-        String outputFile = "/Users/harry/parseMaxLXML/AlrgBs1_Customer1.txt";
-        String delimiter = "?";
+		String inputXMLFile = "/Users/harry/ATGRPT_124.xml";
+        String outputFile = "/Users/harry/Documents/ATGRPT_124.txt";
+        String delimiter = "!";
 
         MaxLExportOutlineParseXML parser = new MaxLExportOutlineParseXML(inputXMLFile, outputFile, delimiter);
 	}
@@ -81,10 +90,11 @@ public class MaxLExportOutlineParseXML {
 					currentElement = startElement.getName().toString();
 
 					if (currentElement.equals("Dimension")) {
+                        mbr = null;
 						sDimension = startElement.getAttributeByName(qMbrName).getValue();
 						parents.push(sDimension);
 						header = "PARENT0," + sDimension + delimiter + "CHILD0," + sDimension + delimiter + "ALIAS0," + sDimension
-							     + delimiter + "PROPERTY0," + sDimension + delimiter + "FORMULA0," + sDimension + delimiter + "CURNAME0," + sDimension + delimiter;
+							     + delimiter + "PROPERTY0," + sDimension + delimiter + "FORMULA0," + sDimension + delimiter + "SOLVEORDER0," + sDimension + delimiter + "CURNAME0," + sDimension + delimiter;
 					} else if (currentElement.equals("AttributeDimension")) {
 						header += startElement.getAttributeByName(qMbrNameRef).getValue() + "0," + sDimension + delimiter;
 					} else if (currentElement.equals("Member")) {
@@ -92,6 +102,7 @@ public class MaxLExportOutlineParseXML {
 						
 						if (mbr != null) {
 							output.append(mbr.toString() + newLineSep);
+                            if (mbr.getName().equals("Operating Exp")) System.out.println(mbr.toString());
 							udaCountTotal = mbr.countUDA() > udaCountTotal ? mbr.countUDA() : udaCountTotal;
 						}
 						
@@ -116,7 +127,7 @@ public class MaxLExportOutlineParseXML {
 						
 						// get last member
 						if (event.asEndElement().getName().toString().equals("Dimension"))
-							output.append(mbr.toString());
+                            output.append(mbr.toString() + newLineSep);
 					}
 				}
 				if (event.isCharacters()) {
@@ -155,6 +166,8 @@ public class MaxLExportOutlineParseXML {
 				mbr.setDataStorage(attribute.getValue());
 			} else if (nodName.equals("MemberFormula")) {
 				mbr.setMemberFormula(attribute.getValue());
+            } else if (nodName.equals("MemberSolveOrder")) {
+                mbr.setMemberSolveOrder(attribute.getValue());
 			} else if (nodName.equals("TwoPassCalc")) {
 				mbr.setTwoPassCalc(attribute.getValue());
 			} else if (nodName.equals("TimeBalance")) {
