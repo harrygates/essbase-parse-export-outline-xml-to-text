@@ -63,8 +63,8 @@ public class MaxLExportOutlineParseXML {
     }
 
 	public static void main(String[] args) {
-		String inputXMLFile = "/Users/harry/ATGRPT_124.xml";
-        String outputFile = "/Users/harry/Documents/ATGRPT_124.txt";
+		String inputXMLFile = "/Users/harry/test_124.xml";
+        String outputFile = "/Users/harry/Documents/test_124.txt";
         String delimiter = "!";
 
         MaxLExportOutlineParseXML parser = new MaxLExportOutlineParseXML(inputXMLFile, outputFile, delimiter);
@@ -102,7 +102,6 @@ public class MaxLExportOutlineParseXML {
 						
 						if (mbr != null) {
 							output.append(mbr.toString() + newLineSep);
-                            if (mbr.getName().equals("Operating Exp")) System.out.println(mbr.toString());
 							udaCountTotal = mbr.countUDA() > udaCountTotal ? mbr.countUDA() : udaCountTotal;
 						}
 						
